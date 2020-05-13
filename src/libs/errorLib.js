@@ -13,6 +13,17 @@ export function initSentry() {
   });
 }
 
+export function logError(error, errorInfo = null) {
+  if (isLocal) {
+    return;
+  }
+
+  Sentry.withScope((scope) => {
+    errorInfo && scope.setExtras(errorInfo);
+    Sentry.captureException(error);
+  });
+}
+
 export function onError(error) {
   let errorInfo = {};
   let message = error.toString();
